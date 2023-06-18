@@ -1,7 +1,6 @@
 # create code that can be convert pdf file to txt
-import PyPDF2
 import os
-
+from pdfreader import SimplePDFViewer
 
 # Create directory if it doesn't exist
 if not os.path.exists("hasil"):
@@ -10,23 +9,17 @@ if not os.path.exists("hasil"):
 # Open the PDF file in read-binary mode
 with open("sample.pdf", 'rb') as pdf_file:
 
-    # Create a PDF reader object
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+    # Create a PDF viewer object
+    pdf_viewer = SimplePDFViewer(pdf_file)
 
-    # Get the total number of pages in the PDF document
-    num_pages = pdf_reader.getNumPages()
+    # Iterate through each page in the PDF document
+    for idx, canvas in enumerate(pdf_viewer):
 
-    # Loop through each page in the document
-    for page_num in range(num_pages):
-
-        # Get the current page object
-        page_obj = pdf_reader.getPage(page_num)
-
-        # Extract the text from the current page
-        page_text = page_obj.extractText()
+        # Get the text from the current page
+        page_text = "".join(canvas.strings)
 
         # Define file name
-        output_name = f"hasil/example-page{page_num}.txt"
+        output_name = f"hasil/example-page{idx}.txt"
 
         # Write extracted text to txt file
         with open(output_name, 'w') as txt_file:
