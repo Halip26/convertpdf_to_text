@@ -3,28 +3,28 @@ import os
 import warnings
 from pdfreader import SimplePDFViewer
 
-# Create directory if it doesn't exist
+# Membuat direktori jika belum ada
 if not os.path.exists("hasil"):
     os.makedirs("hasil")
 
-# Open the PDF file in read-binary mode
+# Membuka file PDF dengan mode baca biner
 with open("./pdf_file/contoh.pdf", "rb") as pdf_file:
 
-    # Create a PDF viewer object
+    # Membuat objek SimplePDFViewer
     pdf_viewer = SimplePDFViewer(pdf_file)
 
-    # Filter out the binary data warning
+    # Filtering warning data binary
     warnings.filterwarnings("ignore", category=Warning)
 
-    # Iterate through each page in the PDF document
+    # Melakukan iterasi tiap halaman pada dokumen PDF
     for idx, canvas in enumerate(pdf_viewer):
 
-        # Get the text from the current page
+        # Mendapatkan teks dari halaman saat ini
         page_text = "".join(canvas.strings)
 
-        # Define file name
+        # Menentukan nama file hasil
         output_name = f"hasil/example-page{idx}.txt"
 
-        # Write extracted text to txt file
+        # Menulis teks hasil ekstraksi ke dalam file teks
         with open(output_name, "w") as txt_file:
             txt_file.write(page_text)
