@@ -1,40 +1,33 @@
+# create code that can be convert pdf file to txt
 import PyPDF2
 import os
 
 
-if(os.path.isdir("temp") == False):
-    os.mkdir("temp")
+# Create directory if it doesn't exist
+if not os.path.exists("hasil"):
+    os.makedirs("hasil")
 
-txtpath = ""
-pdfpath = ""
+# Open the PDF file in read-binary mode
+with open("sample.pdf", 'rb') as pdf_file:
 
+    # Create a PDF reader object
+    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
 
-# Berikan jalur untuk pdf kamu di sini
-pdfpath = input(
-    "Enter the name of your pdf file - please use backslash when typing in directory path: ")
-# Sediakan jalur untuk file teks keluaran
-txtpath = input(
-    "Enter the name of your txt file - please use backslash when typing in directory path: ")
+    # Get the total number of pages in the PDF document
+    num_pages = pdf_reader.getNumPages()
 
-# Ini adalah contoh direktori dasar di mana semua file teks kamu akan disimpan jika kamu tidak memberikan jalur tertentu
-BASEDIR = os.path.realpath("temp")
-print(BASEDIR)
+    # Loop through each page in the document
+    for page_num in range(num_pages):
 
+        # Get the current page object
+        page_obj = pdf_reader.getPage(page_num)
 
-if(len(txtpath) == 0):
-    txtpath = os.path.join(BASEDIR, os.path.basename(
-        os.path.normpath(pdfpath)).replace(".pdf", "")+".txt")
-pdfobj = open(pdfpath, 'rb')
+        # Extract the text from the current page
+        page_text = page_obj.extractText()
 
-pdfread = PyPDF2.PdfFileReader(pdfobj)
+        # Define file name
+        output_name = f"hasil/example-page{page_num}.txt"
 
-x = pdfread.numPages
-
-for i in range(x):
-    pageObj = pdfread.getPage(i)
-    with open(txtpath, 'a+') as f:
-        f.write((pageObj.extractText()))
-    # Ini hanya memberikan gambaran umum tentang apa yang ditambahkan ke output kamu, kamu dapat menghapusnya jika mau
-    print(pageObj.extractText())
-
-pdfobj.close()
+        # Write extracted text to txt file
+        with open(output_name, 'w') as txt_file:
+            txt_file.write(page_text)
